@@ -26,7 +26,7 @@ def mint(wallet: LocalAccount) -> None:
         "chainId": w3.eth.chain_id,
         "from": wallet.address,
         "to": w3.to_checksum_address(MINT_ADDRESS),
-        "gasPrice": w3.to_wei(2, "gwei"),
+        "gasPrice": w3.to_wei(1.1, "gwei"),
         "nonce": w3.eth.get_transaction_count(wallet.address),
         "data": DATA,
     }
@@ -56,9 +56,10 @@ def main():
     for wallet in wallets:
         try:
             mint(wallet)
-            time_to_sleep = randint(*TIME_TO_SLEEP)
-            logger.info(f"Sleep {time_to_sleep} sec")
-            time.sleep(time_to_sleep)
+            if wallet != wallets[-1]:
+                time_to_sleep = randint(*TIME_TO_SLEEP)
+                logger.info(f"Sleep {time_to_sleep} sec")
+                time.sleep(time_to_sleep)
         except Exception as ex:
             logger.error(f"Error {ex}")
     logger.info("Finish")
